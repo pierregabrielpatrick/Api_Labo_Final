@@ -1,4 +1,5 @@
 ﻿using Domain;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace BusinessLogicLayer
 {
-    public interface HouseService
+    public interface UserService
     {
 
-        public Task<List<House>> GetAllHouse( int Id);
-        House AddHouse(House dto, int userId);
+        public Task<List<User>> GetAllUsers();
+      
     }
 }

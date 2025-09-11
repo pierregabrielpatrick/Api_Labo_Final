@@ -1,5 +1,6 @@
 
 using Api_Labo_Final.Utils;
+using BusinessLogicLayer;
 using Dal.context;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,7 +24,8 @@ namespace Api_Labo_Final
 
             builder.Services.AddSingleton<JwtUtils>();
 
-            builder.Services.AddScoped
+            builder.Services.AddScoped<HouseService>();
+            builder.Services.AddScoped<HouseRepository>();
 
             var app = builder.Build();
 

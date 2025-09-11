@@ -1,4 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Api_Labo_Final.dto;
+using Api_Labo_Final.Mapper;
+using Api_Labo_Final.Utils;
+using Dal.context;
+using Domain;
+using Isopoh.Cryptography.Argon2;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api_Labo_Final.Controllers
@@ -8,10 +14,10 @@ namespace Api_Labo_Final.Controllers
     public class AuthController : ControllerBase
     {
 
-        private readonly MyDbContext _context;
+        private readonly FinalContext _context;
         private readonly JwtUtils _jwtUtils;
 
-        public AuthController(MyDbContext context, JwtUtils jwtUtils)
+        public AuthController(FinalContext context, JwtUtils jwtUtils)
         {
             _context = context;
             _jwtUtils = jwtUtils;
@@ -63,3 +69,4 @@ namespace Api_Labo_Final.Controllers
             return Ok(result);
         }
     }
+}

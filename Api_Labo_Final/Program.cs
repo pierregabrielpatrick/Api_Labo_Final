@@ -1,4 +1,8 @@
 
+using Api_Labo_Final.Utils;
+using Dal.context;
+using Microsoft.EntityFrameworkCore;
+
 namespace Api_Labo_Final
 {
     public class Program
@@ -13,6 +17,13 @@ namespace Api_Labo_Final
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddDbContext<FinalContext>(o => o
+    .UseSqlServer(builder.Configuration.GetConnectionString("Main")));
+
+            builder.Services.AddSingleton<JwtUtils>();
+
+            builder.Services.AddScoped
 
             var app = builder.Build();
 

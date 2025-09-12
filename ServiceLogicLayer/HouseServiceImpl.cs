@@ -35,10 +35,11 @@ namespace ServiceLogicLayer
                 _context.SaveChanges();
             }
 
-            // je cherche l'utilisateur connecté et les maisons
+            // je cherche l'utilisateur connecté et les maisons ainsi que 
             // qui lui sont attribuées 
             User user = _context.Users
                 .Include(u => u.Houses)
+               
                 .FirstOrDefault(u => u.Id == userId)!;
 
             // j'ajoute à l'uilisateur la maison

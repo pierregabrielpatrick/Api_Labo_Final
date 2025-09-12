@@ -21,6 +21,10 @@ namespace Dal.config
             builder.HasMany(h => h.Users)
                    .WithMany(u => u.Houses);
 
+
+            builder.HasMany(h => h.ArduinoSensors)
+                   .WithOne(S => S.HouseOwner);
+
             builder.HasIndex(h => h.Name).IsUnique();
         }
     }

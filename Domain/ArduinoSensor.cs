@@ -15,7 +15,7 @@ namespace Domain
         public DateTime? LastUpdated { get; set; } = null!;
         public string? Category { get; set; }
 
-        public int HouseOwner { get; set; }
+        public required House HouseOwner { get; set; }
 
     }
 }

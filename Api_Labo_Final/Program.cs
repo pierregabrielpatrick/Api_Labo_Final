@@ -1,6 +1,6 @@
 
 using Api_Labo_Final.Utils;
-using BusinessLogicLayer;
+using BLL;
 using Dal;
 using Dal.context;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -29,8 +29,9 @@ namespace Api_Labo_Final
 
             builder.Services.AddSingleton<JwtUtils>();
 
-            builder.Services.AddScoped<HouseService>();
-            builder.Services.AddScoped<HouseRepository>();
+            builder.Services.AddScoped<IHouseService, HouseServiceImpl>();
+            builder.Services.AddScoped<IUserService , UserServiceImpl>();
+            builder.Services.AddScoped<HouseRepository , HouseRepositoryImpl>();
 
             builder.Services.AddSwaggerGen(c =>
             {
@@ -85,10 +86,12 @@ namespace Api_Labo_Final
             {
                 o.AddDefaultPolicy(p =>
                 {
-                    p.WithOrigins(
-                        "http://localhost:4200",
-                        builder.Configuration.GetSection("TokenInfo")
-                            .GetSection("audience").Value!);
+                    var audience = builder.Configuration.GetSection("TokenInfo").GetSection("audience").Value;
+                    var origins = new List<string> { "http://localhost:4200" };
+                    if (!string.IsNullOrWhiteSpace(audience))
+                    {                        origins.Add(audience);
+                    }
+                    p.WithOrigins(origins.ToArray());
                     p.AllowAnyHeader();
                     p.AllowAnyMethod();
                 });
@@ -103,7 +106,9 @@ namespace Api_Labo_Final
                 app.UseSwaggerUI();
             }
 
+            app.UseAuthentication();
             app.UseAuthorization();
+            app.UseCors();
 
 
             app.MapControllers();

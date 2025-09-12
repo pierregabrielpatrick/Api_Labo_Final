@@ -7,9 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BusinessLogicLayer
+namespace BLL
 {
-    public class UserServiceImpl : UserService
+    public class UserServiceImpl : IUserService
     {
         private readonly FinalContext _context;
         public UserServiceImpl(FinalContext context)

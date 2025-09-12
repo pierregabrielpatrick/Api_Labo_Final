@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Dal
 {
-    public interface Userrepository
+    public interface UserRepository
     {
 
     }

@@ -1,11 +1,15 @@
-﻿using BusinessLogicLayer;
-using Dal.context;
+﻿using Dal.context;
 using Domain;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace ServiceLogicLayer
+namespace BLL
 {
-    public class HouseServiceImpl : HouseService
+    public class HouseServiceImpl : IHouseService
     {
         private FinalContext _context;
         public List<House> GetAllHouse(int userId)
@@ -17,14 +21,14 @@ namespace ServiceLogicLayer
             return houses;
         }
 
-        public bool AddHouse(House houseRequest , int userId)
+        public bool AddHouse(House houseRequest, int userId)
         {
             // je cherche dans la db si la maison existe dejà
             House? house = _context.Houses.FirstOrDefault(h => h.Name == houseRequest.Name);
             if (house == null)
             {
                 // si elle n'existe pas je l'enregistre dans la DB
-                house = _context.Add(houseRequest      
+                house = _context.Add(houseRequest
                 ).Entity;
                 _context.SaveChanges();
             }
@@ -33,7 +37,7 @@ namespace ServiceLogicLayer
             // qui lui sont attribuées 
             User user = _context.Users
                 .Include(u => u.Houses)
-               
+
                 .FirstOrDefault(u => u.Id == userId)!;
 
             // j'ajoute à l'uilisateur la maison

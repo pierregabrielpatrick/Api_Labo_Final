@@ -31,7 +31,7 @@ namespace Dal.config
 
             builder.Property(s => s.Category);
 
-            // Relation avec House (si House est bien ton entité parent)
+            // Relation avec House (si House est bien  entité parent)
             builder.HasOne<House>()                // Chaque capteur appartient à une maison
                    .WithMany(h => h.ArduinoSensors) // Il faudra ajouter `ICollection<ArduinoSensor>` dans House
                    .HasForeignKey(s => s.HouseOwner)

@@ -1,6 +1,6 @@
 ﻿using Api_Labo_Final.dto;
 using Api_Labo_Final.Mapper;
-using BusinessLogicLayer;
+using BLL;
 using Domain;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,27 +11,22 @@ namespace Api_Labo_Final.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly UserService _userService;
+        private readonly IUserService _userService;
 
-        public UserController(UserService userService)
+        public UserController(IUserService userService)
         {
             this._userService = userService;
         }
 
-        [HttpGet("User")]
+        [HttpGet]
         public async Task<ActionResult<List<UserDTO>>> GetAllUsers()
         {
-
-
             List<User> users = await this._userService.GetAllUsers();
-
             if(users == null)
             {
                 return NoContent();
-            }
-           
+            }           
             List<UserDTO> usersDto = users.Select( p => p.ToUserDTO()).ToList();
-
             return Ok(usersDto);
         }
     }

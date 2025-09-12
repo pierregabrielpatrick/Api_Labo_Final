@@ -1,6 +1,7 @@
 ﻿using Api_Labo_Final.dto;
 using Api_Labo_Final.Utils;
-using BusinessLogicLayer;
+using BLL;
+
 using Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -14,9 +15,9 @@ namespace Api_Labo_Final.Controllers
     public class HouseController : ControllerBase
     {
 
-        private readonly HouseService _houseservice;
+        private readonly IHouseService _houseservice;
 
-        public HouseController(HouseService houseservice)
+        public HouseController(IHouseService houseservice)
         {
             _houseservice = houseservice;
         }
@@ -27,7 +28,12 @@ namespace Api_Labo_Final.Controllers
         {
             int userId = User.GetId();
 
-            var houses  = this._houseservice.GetAllHouse(userId);
+            var houses = this._houseservice.GetAllHouse(userId);
+
+            if (houses == null)
+            {
+                return NotFound();
+            }
 
             return Ok(houses);
         }
@@ -36,37 +42,51 @@ namespace Api_Labo_Final.Controllers
         [HttpPost]
         public IActionResult AddHouse([FromBody] HouseAddDto dto)
         {
-            //// je cherche dans la db si la maison existe dejà
-            //House? house = _context.Houses.FirstOrDefault(h => h.Name == dto.Name);
-            //if (house == null)
-            //{
-            //    // si elle n'existe pas je l'enregistre dans la DB
-            //    house = _context.Add(
-            //        new House
-            //        {
-            //            Name = dto.Name,
-            //            IPV4 = dto.IPV4,
-            //            IsActive = dto.IsActive
-            //        }
-            //    ).Entity;
-            //    _context.SaveChanges();
-            //}
+            // Vérifications recommandées
+            if (dto == null)
+                return BadRequest("Les données de la maison sont requises");
 
-            //// je cherche l'utilisateur connecté et les maisons
-            //// qui lui sont attribuées 
-            //User user = _context.Users
-            //    .Include(u => u.Houses)
-            //    .FirstOrDefault(u => u.Id == User.GetId())!;
+            if (string.IsNullOrWhiteSpace(dto.Name))
+                return BadRequest("Le nom de la maison est requis");
 
-            //// j'ajoute à l'uilisateur la maison
-            //user.Houses.Add(house);
-            //_context.SaveChanges();
+            if (string.IsNullOrWhiteSpace(dto.IPV4))
+                return BadRequest("L'adresse IPv4 est requise");
+            try
+            {
+                //recommendations ajoutées
+                House houseRequest =
+                      new House
+                      {
+                          Name = dto.Name,
+                          IPV4 = dto.IPV4,
+                          IsActive = dto.IsActive
+                      };
 
-            this._houseservice.AddHouse(dto, User.GetId());
-            return Created();
+                bool valid = this._houseservice.AddHouse(houseRequest, User.GetId());
+
+                if (!valid)
+                    return StatusCode(500, "Erreur lors de la création de la maison");
+
+                return Created($"/api/houses/{houseRequest.Id}", houseRequest);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                // Log l'erreur
+                return StatusCode(500, "Erreur interne du serveur");
+            }
+
+
         }
 
 
-    
+
     }
 }

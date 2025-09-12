@@ -5,12 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BusinessLogicLayer
+namespace BLL
 {
-    public interface HouseService
+    public interface IHouseService
     {
 
-        public List<House> GetAllHouse( int Id);
+        public List<House> GetAllHouse(int Id);
         bool AddHouse(House dto, int userId);
     }
 }

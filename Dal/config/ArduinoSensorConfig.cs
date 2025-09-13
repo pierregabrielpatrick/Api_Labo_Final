@@ -31,13 +31,22 @@ namespace Dal.config
 
             builder.Property(s => s.Category);
 
-            // Relation avec House (si House est bien  entité parent)
-            builder.HasOne<House>()                // Chaque capteur appartient à une maison
-                   .WithMany(h => h.ArduinoSensors) // Il faudra ajouter `ICollection<ArduinoSensor>` dans House
-                   .HasForeignKey(s => s.HouseOwner)
+          
+
+            // CORRECTION : Relation avec House
+            // Il faut d'abord ajouter une propriété HouseId dans ArduinoSensor
+            builder.Property(s => s.HouseId)
+                   .IsRequired(); // Clé étrangère obligatoire
+
+            builder.HasOne(s => s.HouseOwner)           // Navigation property vers House
+                   .WithMany(h => h.ArduinoSensors)     // House a plusieurs ArduinoSensors
+                   .HasForeignKey(s => s.HouseId)       // Utilise HouseId comme clé étrangère
                    .OnDelete(DeleteBehavior.Cascade);
 
-            // Exemple d’index (si utile, comme pour Name dans House)
+            // Index sur la clé étrangère (recommandé pour les performances)
+            builder.HasIndex(s => s.HouseId);
+
+            // Index sur Category si nécessaire
             builder.HasIndex(s => s.Category);
         }
     }

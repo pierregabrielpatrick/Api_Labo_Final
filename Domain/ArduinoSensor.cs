@@ -15,6 +15,11 @@ namespace Domain
         public DateTime? LastUpdated { get; set; } = null!;
         public string? Category { get; set; }
 
+
+        // AJOUT : Clé étrangère explicite changement de HouseId en HouseOwnerId
+        public int HouseId { get; set; }
+
+        // Navigation property vers House
         public required House HouseOwner { get; set; }
 
     }

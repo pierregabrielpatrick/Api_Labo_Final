@@ -15,30 +15,47 @@ namespace Api_Labo_Final.Controllers
     public class AuthController : ControllerBase
     {
 
-        private readonly AuthService _authService;
+        private readonly IAuthService _authService;
         private readonly JwtUtils _jwtUtils;
 
-        public AuthController(AuthService _authService , JwtUtils jwtUtils)
+        public AuthController(IAuthService _authService, JwtUtils jwtUtils)
         {
-            _authService = _authService;
-            _jwtUtils = jwtUtils;
+            this._authService = _authService;
+            this._jwtUtils = jwtUtils;
         }
 
         [HttpPost("register")]
         public IActionResult Register([FromBody] RegisterFormDTO form)
         {
-            if (this._authService.checkExistence(form.Username))
+            try
             {
-                return BadRequest(new { Content = $"User with username {form.Username} already exist" });
+                if (this._authService == null)
+                {
+                    return StatusCode(500, new { Content = "Service difficle not available" });
+                }
+                // Validation du DTO
+                if (form == null || string.IsNullOrEmpty(form.Username))
+                {
+                    return BadRequest(new { Content = "Invalid form data" });
+                }
+                bool valid2 = this._authService.CheckExistence(form.Username);
+                Console.WriteLine(valid2);
+                if (valid2)
+                {
+                    return BadRequest(new { Content = $"User with username {form.Username} already exist" });
+                }
+                User user = form.ToUser();
+                user.Password = Argon2.Hash(form.Password);
+                user.Role = UserRole.USER;
+                int neoId = this._authService.Insert(user);
+                return Ok(neoId);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in Register: {ex.Message}");
+                return StatusCode(500, new { Content = "Internal server error" });
             }
 
-            User user = form.ToUser();
-            user.Password = Argon2.Hash(form.Password);
-            user.Role = UserRole.USER;
-
-            int neoId = this._authService.Insert(user);            
-
-            return Ok(neoId);
         }
 
         [HttpPost("login")]

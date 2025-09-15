@@ -32,17 +32,17 @@ namespace BLL
 
                 // 1. Créer 10 utilisateurs
                 var users = await CreateUsersAsync();
-                result.CreatedUsers = users;
+               // result.CreatedUsers = users;
                 _logger.LogInformation("Créé {Count} utilisateurs", users.Count);
 
                 // 2. Créer 3 maisons avec 3 utilisateurs chacune
                 var houses = await CreateHousesAsync(users);
-                result.CreatedHouses = houses;
+               // result.CreatedHouses = houses;
                 _logger.LogInformation("Créé {Count} maisons", houses.Count);
 
                 // 3. Créer 10 capteurs Arduino pour chaque maison (30 total)
                 var sensors = await CreateArduinoSensorsAsync(houses);
-                result.CreatedSensors = sensors;
+               // result.CreatedSensors = sensors;
                 _logger.LogInformation("Créé {Count} capteurs Arduino", sensors.Count);
 
                 await transaction.CommitAsync();
@@ -82,7 +82,7 @@ namespace BLL
             for (int i = 0; i < userData.Length; i++)
             {
                 var (username, roleString) = userData[i];
-                var role = Enum.TryParse<UserRole>(roleString, out var parsedRole) ? parsedRole : UserRole.User;
+                var role = Enum.TryParse<UserRole>(roleString, out var parsedRole) ? parsedRole : UserRole.USER;
 
                 var user = new User
                 {
@@ -172,7 +172,7 @@ namespace BLL
 
                     var sensor = new ArduinoSensor
                     {
-                        DefinitionOfEvent = $"{baseDescription} - {room}",
+                        DefinitionOfEvent = $"{baseDescription}",
                         DigitalValue = isDigital ? (random.NextDouble() > 0.5 ? 1.0 : 0.0) : Math.Round(random.NextDouble() * 100, 2),
                         AnanlogicValue = isDigital,
                         LastUpdated = DateTime.UtcNow.AddMinutes(-random.Next(1, 1440)), // Entre 1 minute et 24h

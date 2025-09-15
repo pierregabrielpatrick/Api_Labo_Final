@@ -31,7 +31,8 @@ namespace Api_Labo_Final
 
             builder.Services.AddScoped<IHouseService, HouseServiceImpl>();
             builder.Services.AddScoped<IUserService , UserServiceImpl>();
-            builder.Services.AddScoped<HouseRepository , HouseRepositoryImpl>();
+            builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<IBatchDataService , BatchDataService>();
 
             builder.Services.AddSwaggerGen(c =>
             {

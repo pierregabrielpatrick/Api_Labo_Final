@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using BLL;
+using Domain;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api_Labo_Final.Controllers
@@ -38,9 +40,9 @@ namespace Api_Labo_Final.Controllers
                     message = result.Summary,
                     data = new
                     {
-                        usersCount = result.CreatedUsers.Count,
-                        housesCount = result.CreatedHouses.Count,
-                        sensorsCount = result.CreatedSensors.Count,
+                        //usersCount = result.CreatedUsers.Count,
+                        //housesCount = result.CreatedHouses.Count,
+                        //sensorsCount = result.CreatedSensors.Count,
                         createdAt = result.CreatedAt
                     },
                     details = result

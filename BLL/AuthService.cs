@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BLL
 {
-    public class AuthService
+    public class AuthService: IAuthService
     {
         private readonly FinalContext _context;
 
@@ -18,10 +18,10 @@ namespace BLL
             _context = context;
         }
 
-        public bool checkExistence(string formName)
+        public bool CheckExistence(string formName)
         {
             return _context.Users.Any(u => u.Username == formName);
-        }
+        }      
 
         public User? CheckValidity(string userNameRequest)
         {
@@ -33,6 +33,11 @@ namespace BLL
             _context.Users.Add(user);
 
             return _context.SaveChanges();
+        }
+
+        public int Update(User user)
+        {
+            throw new NotImplementedException();
         }
     }
 }

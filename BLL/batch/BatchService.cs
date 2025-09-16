@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BLL
+namespace BLL.batch
 {
     public class BatchDataService : IBatchDataService
     {
@@ -173,7 +173,7 @@ namespace BLL
                     var sensor = new ArduinoSensor
                     {
                         DefinitionOfEvent = $"{baseDescription}",
-                        DigitalValue = isDigital ? (random.NextDouble() > 0.5 ? 1.0 : 0.0) : Math.Round(random.NextDouble() * 100, 2),
+                        DigitalValue = isDigital ? random.NextDouble() > 0.5 ? 1.0 : 0.0 : Math.Round(random.NextDouble() * 100, 2),
                         AnanlogicValue = isDigital,
                         LastUpdated = DateTime.UtcNow.AddMinutes(-random.Next(1, 1440)), // Entre 1 minute et 24h
                         Category = category,

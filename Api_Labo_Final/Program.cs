@@ -1,6 +1,10 @@
 
 using Api_Labo_Final.Utils;
 using BLL;
+using BLL.batch;
+using BLL.handlers;
+using BLL.mqtt;
+using BLL.user;
 using Dal;
 using Dal.context;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -33,6 +37,20 @@ namespace Api_Labo_Final
             builder.Services.AddScoped<IUserService , UserServiceImpl>();
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IBatchDataService , BatchDataService>();
+
+            builder.Services.AddSingleton<MqttService>();
+            builder.Services.AddSingleton<IMqttService>(provider =>
+                provider.GetRequiredService<MqttService>());
+            builder.Services.AddHostedService<MqttService>(provider =>
+                provider.GetRequiredService<MqttService>());
+            //builder.Services.AddScoped<IMqttTopicHandler, CmdHandler>();
+            //builder.Services.AddScoped<IMqttTopicHandler, StateHandler>();
+            //builder.Services.AddScoped<IMqttTopicHandler, ArduinoSensorHandler>();
+
+            builder.Services.AddSingleton<IMqttTopicHandler, CmdHandler>();
+            builder.Services.AddSingleton<IMqttTopicHandler, StateHandler>();
+            builder.Services.AddSingleton<IMqttTopicHandler, ArduinoSensorHandler>();
+
 
             builder.Services.AddSwaggerGen(c =>
             {

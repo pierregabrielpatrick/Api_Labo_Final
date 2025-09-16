@@ -1,6 +1,5 @@
 @Api_Labo_Final_HostAddress = http://localhost:5028
 
-GET {{Api_Labo_Final_HostAddress}}/weatherforecast/
-Accept: application/json
+
 
 ###

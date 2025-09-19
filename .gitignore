@@ -361,3 +361,7 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/Api_Labo_Final/README.md
+/Api_Labo_Final/README.md
+/BLL/handlers/CmdHandler.cs
+/BLL/handlers/CommandDto.cs
